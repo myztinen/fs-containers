@@ -15,10 +15,11 @@ router.post('/', async (req, res) => {
     text: req.body.text,
     done: false
   })
+
   const amount = await redis.get("added_todos");
   const newAmount = Number(amount) + 1;
   await redis.set("added_todos", newAmount.toString());
-  res.json({ "added_todos": newAmount });
+  res.json(todo);
 });
 
 const singleRouter = express.Router();
@@ -33,7 +34,7 @@ const findByIdMiddleware = async (req, res, next) => {
 
 /* DELETE todo. */
 singleRouter.delete('/', async (req, res) => {
-  await req.todo.delete()
+  await Todo.findByIdAndDelete(req.todo._id)
   res.sendStatus(200);
 });
 
